@@ -15,9 +15,9 @@ class HandlerAllText(Handler):
 
     def pressed_btn_settings(self, message):
         self.bot.send_message(message.chat.id,
-                              MESSAGES['trading_store'],
+                              MESSAGES['settings'],
                               parse_mode="HTML",
-                              reply_markup=self.keyboards.start_info())
+                              reply_markup=self.keyboards.settings_menu())
 
     def pressed_btn_back(self, message):
         self.bot.send_message(message.chat.id,
