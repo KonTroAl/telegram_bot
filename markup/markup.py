@@ -1,7 +1,7 @@
 from telebot.types import KeyboardButton
 
-from settings import settings
-from data_base import DBManager
+from telegram_bot.settings import settings
+from telegram_bot.data_base.dbalchemy import DBManager
 
 class Keyboards:
     def __init__(self):

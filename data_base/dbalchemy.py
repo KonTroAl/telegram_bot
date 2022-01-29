@@ -11,6 +11,6 @@ class Singleton(type):
         return cls.__instance
 
 
-class DBmanager(metaclass=Singleton):
+class DBManager(metaclass=Singleton):
     def __init__(self):
         pass

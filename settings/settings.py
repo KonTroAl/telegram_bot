@@ -1,10 +1,10 @@
 import os
 
-from ..token import token
+from .token_name import token_name
 
 from emoji import emojize
 
-TOKEN = token
+TOKEN = token_name
 
 NAME_DB = 'products.sqlite'
 
