@@ -1,6 +1,7 @@
 from telebot.types import KeyboardButton
 
 from settings import settings
+from data_base import DBManager
 
 class Keyboards:
     def __init__(self):
