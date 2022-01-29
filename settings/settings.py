@@ -20,7 +20,7 @@ COUNT = 0
 
 KEYBOARD = {
     'CHOOSE_GOODS': emojize(':open_file_folder: Выбрать товар'),
-    'INFO': emojize(':speech_ballon: О магазине'),
+    'INFO': emojize(':speech_balloon: О магазине'),
     'SETTINGS': emojize('⚙️ Настройки'),
     'SEMIPRODUCT': emojize(':pizza: Полуфабрикаты'),
     'GROCERY': emojize(':bread: Бакалея'),
