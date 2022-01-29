@@ -23,3 +23,8 @@ class Keyboards:
 
         return self.markup
 
+    def start_info(self):
+        self.markup = ReplyKeyboardMarkup(True, True)
+        item_btn_1 = self.set_btn('<<')
+        self.markup.row(item_btn_1)
+        return self.markup
