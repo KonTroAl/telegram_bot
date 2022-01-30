@@ -1,3 +1,12 @@
+from os import path
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import create_session
+
+from settings import settings
+from dbcore import Base
+from models.product import Product
+
 
 class Singleton(type):
 
@@ -13,4 +22,17 @@ class Singleton(type):
 
 class DBManager(metaclass=Singleton):
     def __init__(self):
-        pass
+        self.engine = create_engine(settings.DATABASE)
+        session = create_session(bind=self.engine)
+        self._session = session()
+        if not path.isfile(settings.DATABASE):
+            Base.metadata.create_all(self.engine)
+
+    def select_all_product_category(self, category):
+        result = self._session.query(Product).filter_by(category_id=category).all()
+        self.close()
+        return result
+
+    def close(self):
+        self._session.close()
+
