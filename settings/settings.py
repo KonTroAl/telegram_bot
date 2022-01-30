@@ -6,7 +6,7 @@ from emoji import emojize
 
 TOKEN = token_name
 
-NAME_DB = 'products.sqlite'
+NAME_DB = 'products.db'
 
 VERSION = '0.0.1'
 

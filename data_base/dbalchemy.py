@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import create_session
 
 from settings import settings
-from dbcore import Base
+from .dbcore import Base
 from models.product import Product
 
 
@@ -24,7 +24,7 @@ class DBManager(metaclass=Singleton):
     def __init__(self):
         self.engine = create_engine(settings.DATABASE)
         session = create_session(bind=self.engine)
-        self._session = session()
+        self._session = session
         if not path.isfile(settings.DATABASE):
             Base.metadata.create_all(self.engine)
 
