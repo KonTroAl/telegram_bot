@@ -41,7 +41,7 @@ class DBManager(metaclass=Singleton):
 
     def _add_orders(self, quantity, product_id, user_id):
 
-        all_products_id = self.select_all_products_is()
+        all_products_id = self.select_all_products_id()
 
         if product_id in all_products_id:
             order_quantity = self.select_order_quantity(product_id)
@@ -64,7 +64,7 @@ class DBManager(metaclass=Singleton):
         self.close()
 
 
-    def select_all_products_is(self):
+    def select_all_products_id(self):
         result = self._session.query(Order.product_id).all()
         self.close()
         return _convert(result)
@@ -105,3 +105,8 @@ class DBManager(metaclass=Singleton):
         result = self._session.query(Product.quantity).filter_by(id=product_id).one()
         self.close()
         return result.quantity
+
+    def count_row_orders(self):
+        result = self._session.query(Order).count()
+        self.close()
+        return result
