@@ -13,6 +13,7 @@ class Order(Base):
     quantity = Column(Integer)
     date = Column(DateTime)
     product_id = Column(Integer, ForeignKey('products.id'))
+    user_id = Column(Integer)
     product = relationship(
         Product,
         backref=backref(
