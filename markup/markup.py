@@ -11,6 +11,13 @@ class Keyboards:
         self.DB = DBManager()
 
     def set_btn(self, name, step=0, quantity=0):
+
+        if name == 'AMOUNT_ORDERS':
+            settings.KEYBOARD['AMOUNT_ORDERS'] = '{} {} {}'.format(step +1, ' из ', str(self.DB.count_row_orders()))
+
+        if name == 'AMOUNT_PRODUCT':
+            settings.KEYBOARD['AMOUNT_PRODUCT'] = '{}'.format(quantity)
+
         return KeyboardButton(settings.KEYBOARD[name])
 
     def start_menu(self):

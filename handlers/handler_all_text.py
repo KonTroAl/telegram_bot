@@ -65,6 +65,36 @@ class HandlerAllText(Handler):
                               parse_mode='HTML',
                               reply_markup=self.keyboards.orders_menu(self.step, quantity))
 
+    def pressed_up_btn(self, message):
+        count = self.DB.select_all_products_id()
+        quantity_order = self.DB.select_order_quantity(count[self.step])
+
+        quantity_product = self.DB.select_single_product_quantity(count[self.step])
+
+        if quantity_product > 0:
+            quantity_order += 1
+            quantity_product -= 1
+
+            self.DB.update_order_value(count[self.step], 'quantity', quantity_order)
+            self.DB.update_product_value(count[self.step], 'quantity', quantity_product)
+
+        self.send_message_order(count[self.step], quantity_order, message)
+
+    def pressed_down_btn(self, message):
+        count = self.DB.select_all_products_id()
+        quantity_order = self.DB.select_order_quantity(count[self.step])
+
+        quantity_product = self.DB.select_single_product_quantity(count[self.step])
+
+        if quantity_product > 0:
+            quantity_order -= 1
+            quantity_product += 1
+
+            self.DB.update_order_value(count[self.step], 'quantity', quantity_order)
+            self.DB.update_product_value(count[self.step], 'quantity', quantity_product)
+
+        self.send_message_order(count[self.step], quantity_order, message)
+
     def handle(self):
 
         @self.bot.message_handler(func=lambda message: True)
@@ -88,3 +118,7 @@ class HandlerAllText(Handler):
                                           MESSAGES['no_orders'],
                                           parse_mode='HTML',
                                           reply_markup=self.keyboards.category_menu())
+            elif message.text == settings.KEYBOARD['UP']:
+                self.pressed_up_btn(message)
+            elif message.text == settings.KEYBOARD['DOWN']:
+                self.pressed_down_btn(message)
