@@ -95,6 +95,34 @@ class HandlerAllText(Handler):
 
         self.send_message_order(count[self.step], quantity_order, message)
 
+    def pressed_x_btn(self, message):
+
+        count = self.DB.select_all_products_id()
+
+        if count.__len__() > 0:
+            quantity_order = self.DB.select_order_quantity(count[self.step])
+            quantity_product = self.DB.select_single_product_quantity(count[self.step])
+
+            quantity_product += quantity_order
+
+            self.DB.delete_order(count[self.step])
+            self.DB.update_product_value(count[self.step], 'quantity', quantity_product)
+
+            self.step -= 1
+
+        count = self.DB.select_all_products_id()
+
+        if count.__len__() > 0:
+            quantity_order = self.DB.select_order_quantity(count[self.step])
+            self.send_message_order(count[self.step], quantity_order, message)
+        else:
+            self.bot.send_message(message.chat.id,
+                                  MESSAGES['no_orders'],
+                                  parse_mode='HTML',
+                                  reply_markup=self.keyboards.category_menu())
+
+
+
     def handle(self):
 
         @self.bot.message_handler(func=lambda message: True)
@@ -110,6 +138,11 @@ class HandlerAllText(Handler):
                 self.pressed_btn_choose_goods(message)
             elif message.text == settings.KEYBOARD['SEMIPRODUCT']:
                 self.pressed_btn_product(message, 'SEMIPRODUCT')
+            elif message.text == settings.KEYBOARD['GROCERY']:
+                self.pressed_btn_product(message, 'GROCERY')
+            elif message.text == settings.KEYBOARD['ICE_CREAM']:
+                self.pressed_btn_product(message, 'ICE_CREAM')
+
             elif message.text == settings.KEYBOARD['ORDER']:
                 if self.DB.count_row_orders() > 0:
                     self.pressed_btn_order(message)
@@ -120,5 +153,7 @@ class HandlerAllText(Handler):
                                           reply_markup=self.keyboards.category_menu())
             elif message.text == settings.KEYBOARD['UP']:
                 self.pressed_up_btn(message)
-            elif message.text == settings.KEYBOARD['DOWN']:
+            elif message.text == settings.KEYBOARD['DOUWN']:
                 self.pressed_down_btn(message)
+            elif message.text == settings.KEYBOARD['X']:
+                self.pressed_x_btn(message)
