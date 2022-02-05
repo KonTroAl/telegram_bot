@@ -2,7 +2,7 @@ from os import path
 from datetime import datetime
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import create_session
+from sqlalchemy.orm import sessionmaker
 
 from settings import settings
 from settings.utility import _convert
@@ -26,8 +26,8 @@ class Singleton(type):
 class DBManager(metaclass=Singleton):
     def __init__(self):
         self.engine = create_engine(settings.DATABASE)
-        session = create_session(bind=self.engine)
-        self._session = session
+        Session = sessionmaker(bind=self.engine)
+        self._session = Session()
         if not path.isfile(settings.DATABASE):
             Base.metadata.create_all(self.engine)
 
@@ -60,7 +60,7 @@ class DBManager(metaclass=Singleton):
             self.update_product_value(product_id, 'quantity', product_quantity)
 
         self._session.add(order)
-        # self._session.commit()
+        self._session.commit()
         self.close()
 
 
@@ -83,7 +83,7 @@ class DBManager(metaclass=Singleton):
     def update_product_value(self, product_id, name, value):
         self._session.query(Product).filter_by(
             id=product_id).update({name: value})
-        # self._session.commit()
+        self._session.commit()
         self.close()
 
     def select_single_product_name(self, product_id):
