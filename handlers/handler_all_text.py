@@ -2,6 +2,7 @@ from .handler import Handler
 from settings import settings
 from settings.message import MESSAGES
 
+
 class HandlerAllText(Handler):
 
     def __init__(self, bot):
@@ -51,7 +52,7 @@ class HandlerAllText(Handler):
     def send_message_order(self, product_id, quantity, message):
         self.bot.send_message(message.chat.id,
                               MESSAGES['order_number'].format(
-                                  self.step+1
+                                  self.step + 1
                               ),
                               parse_mode='HTML')
         self.bot.send_message(message.chat.id,
@@ -121,7 +122,22 @@ class HandlerAllText(Handler):
                                   parse_mode='HTML',
                                   reply_markup=self.keyboards.category_menu())
 
+    def pressed_btn_next_step(self, message):
 
+        if self.step < self.DB.count_row_orders() - 1:
+            self.step += 1
+
+        count = self.DB.select_all_products_id()
+        quantity_order = self.DB.select_order_quantity(count[self.step])
+        self.send_message_order(count[self.step], quantity_order, message)
+
+    def pressed_btn_back_step(self, message):
+        if self.step > 0:
+            self.step -= 1
+
+        count = self.DB.select_all_products_id()
+        quantity_order = self.DB.select_order_quantity(count[self.step])
+        self.send_message_order(count[self.step], quantity_order, message)
 
     def handle(self):
 
@@ -157,3 +173,7 @@ class HandlerAllText(Handler):
                 self.pressed_down_btn(message)
             elif message.text == settings.KEYBOARD['X']:
                 self.pressed_x_btn(message)
+            elif message.text == settings.KEYBOARD['NEXT_STEP']:
+                self.pressed_btn_next_step(message)
+            elif message.text == settings.KEYBOARD['BACK_STEP']:
+                self.pressed_btn_back_step(message)
