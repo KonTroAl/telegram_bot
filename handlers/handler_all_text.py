@@ -148,7 +148,7 @@ class HandlerAllText(Handler):
                               ),
                               parse_mode='HTML',
                               reply_markup=self.keyboards.category_menu())
-        self.DB.delete_order()
+        self.DB.delete_all_order()
 
     def handle(self):
 
