@@ -63,7 +63,6 @@ class DBManager(metaclass=Singleton):
         self._session.commit()
         self.close()
 
-
     def select_all_products_id(self):
         result = self._session.query(Order.product_id).all()
         self.close()
@@ -78,7 +77,6 @@ class DBManager(metaclass=Singleton):
         self._session.query(Order).filter_by(product_id=product_id).update({name: value})
         self._session.commit()
         self.close()
-
 
     def update_product_value(self, product_id, name, value):
         self._session.query(Product).filter_by(
@@ -115,3 +113,15 @@ class DBManager(metaclass=Singleton):
         self._session.query(Order).filter_by(product_id=product_id).delete()
         self._session.commit()
         self.close()
+
+    def delete_all_order(self):
+        all_id_orders = self.select_all_order_id()
+        for itm in all_id_orders:
+            self._session.query(Order).filter_by(id=itm).delete()
+            self._session.commit()
+        self.close()
+
+    def select_all_order_id(self):
+        result = self._session.query(Order.id).all()
+        self.close()
+        return _convert(result)

@@ -1,6 +1,7 @@
 from .handler import Handler
 from settings import settings
 from settings.message import MESSAGES
+from settings import utility
 
 
 class HandlerAllText(Handler):
@@ -139,6 +140,16 @@ class HandlerAllText(Handler):
         quantity_order = self.DB.select_order_quantity(count[self.step])
         self.send_message_order(count[self.step], quantity_order, message)
 
+    def pressed_aplay_btn(self, message):
+        self.bot.send_message(message.chat.id,
+                              MESSAGES['applay'].format(
+                                  utility.get_total_coast(self.DB),
+                                  utility.get_total_quantity(self.DB)
+                              ),
+                              parse_mode='HTML',
+                              reply_markup=self.keyboards.category_menu())
+        self.DB.delete_order()
+
     def handle(self):
 
         @self.bot.message_handler(func=lambda message: True)
@@ -177,3 +188,7 @@ class HandlerAllText(Handler):
                 self.pressed_btn_next_step(message)
             elif message.text == settings.KEYBOARD['BACK_STEP']:
                 self.pressed_btn_back_step(message)
+            elif message.text == settings.KEYBOARD['APPLAY']:
+                self.pressed_aplay_btn(message)
+            else:
+                self.bot.send_message(message.chat.id, message.text)
